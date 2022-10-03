@@ -1,0 +1,72 @@
+[gd_scene load_steps=24 format=2]
+
+[ext_resource path="res://Entities/Player/Assets/Idle/PlayerIdle5.png" type="Texture" id=1]
+[ext_resource path="res://Entities/Player/Player.cs" type="Script" id=2]
+[ext_resource path="res://Entities/Player/Assets/Idle/PlayerIdle6.png" type="Texture" id=3]
+[ext_resource path="res://Entities/Player/Assets/Idle/PlayerIdle4.png" type="Texture" id=4]
+[ext_resource path="res://Entities/Player/Assets/Idle/PlayerIdle3.png" type="Texture" id=5]
+[ext_resource path="res://Entities/Player/Assets/Idle/PlayerIdle0.png" type="Texture" id=6]
+[ext_resource path="res://Entities/Player/Assets/Idle/PlayerIdle1.png" type="Texture" id=7]
+[ext_resource path="res://Entities/Player/Assets/Idle/PlayerIdle2.png" type="Texture" id=8]
+[ext_resource path="res://Entities/Player/Assets/Fall/PlayerFall8.png" type="Texture" id=9]
+[ext_resource path="res://Entities/Player/Assets/Fall/PlayerFall4.png" type="Texture" id=10]
+[ext_resource path="res://Entities/Player/Assets/Fall/PlayerFall0.png" type="Texture" id=11]
+[ext_resource path="res://Entities/Player/Assets/Fall/PlayerFall3.png" type="Texture" id=12]
+[ext_resource path="res://Entities/Player/Assets/Fall/PlayerFall6.png" type="Texture" id=13]
+[ext_resource path="res://Entities/Player/Assets/Fall/PlayerFall7.png" type="Texture" id=14]
+[ext_resource path="res://Entities/Player/Assets/Fall/PlayerFall1.png" type="Texture" id=15]
+[ext_resource path="res://Entities/Player/Assets/Fall/PlayerFall2.png" type="Texture" id=16]
+[ext_resource path="res://Entities/Player/Assets/Fall/PlayerFall5.png" type="Texture" id=17]
+[ext_resource path="res://Entities/Player/Assets/Run/PlayerRun0.png" type="Texture" id=18]
+[ext_resource path="res://Entities/Player/Assets/Run/PlayerRun1.png" type="Texture" id=19]
+[ext_resource path="res://Entities/Player/Assets/Run/PlayerRun2.png" type="Texture" id=20]
+[ext_resource path="res://Entities/Player/Assets/Run/PlayerRun3.png" type="Texture" id=21]
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 11 ), ExtResource( 15 ), ExtResource( 16 ), ExtResource( 12 ), ExtResource( 10 ), ExtResource( 17 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 9 ) ],
+"loop": true,
+"name": "Fall",
+"speed": 9.0
+}, {
+"frames": [ ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 5 ), ExtResource( 4 ), ExtResource( 1 ), ExtResource( 3 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 9.0
+}, {
+"frames": [ ExtResource( 18 ), ExtResource( 19 ), ExtResource( 20 ), ExtResource( 21 ) ],
+"loop": true,
+"name": "Run",
+"speed": 5.0
+} ]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 8, 16 )
+
+[node name="Player" type="KinematicBody2D"]
+script = ExtResource( 2 )
+DecreasedGravity = 0.6
+GroundedTime = 0.16
+WeightImpact = 200.0
+DrinkgingImpact = 0.85
+AnimationSpritePath = NodePath("AnimatedSprite")
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+frames = SubResource( 2 )
+animation = "Run"
+frame = 3
+playing = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[connection signal="area_entered" from="Area2D" to="." method="AreaEntered"]
+[connection signal="area_exited" from="Area2D" to="." method="AreaExited"]
