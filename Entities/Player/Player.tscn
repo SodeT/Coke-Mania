@@ -44,6 +44,7 @@ animations = [ {
 extents = Vector2( 8, 16 )
 
 [node name="Player" type="KinematicBody2D"]
+scale = Vector2( 4, 4 )
 script = ExtResource( 2 )
 DecreasedGravity = 0.6
 GroundedTime = 0.16
@@ -54,7 +55,6 @@ AnimationSpritePath = NodePath("AnimatedSprite")
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 2 )
 animation = "Run"
-frame = 3
 playing = true
 
 [node name="Camera2D" type="Camera2D" parent="."]

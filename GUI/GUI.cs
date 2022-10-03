@@ -6,8 +6,13 @@ public class GUI : Control
     // Level setup
     [Export] int CokeNumber = 10;
     [Export] float LevelTime = 10f;
-    [Export] string LevelPath;
-    [Export] string NextLevelPath;
+    [Export] string LevelPath = "";
+    [Export] string NextLevelPath = "";
+
+    float LevelEndTime = 0f;
+    float EndDelay = 0.2f;
+    bool Next = false;
+    bool End = false;
 
     [Export] NodePath PlayerPath;
     KinematicBody2D Player;
@@ -22,6 +27,17 @@ public class GUI : Control
     [Export] NodePath CurrentCokeNumberPath;
     Label CurrentCokeNumber;
 
+    [Export] NodePath AudioFailPath;
+    AudioStreamPlayer AudioFail;
+
+    [Export] NodePath AudioJumpPath;
+    AudioStreamPlayer AudioJump;
+
+    [Export] NodePath AudioDrinkPath;
+    AudioStreamPlayer AudioDrink;
+
+    [Export] NodePath AudioLevelPath;
+    AudioStreamPlayer AudioLevel;
 
 
     public override void _Ready()
@@ -32,6 +48,11 @@ public class GUI : Control
 
         Player = GetNode<KinematicBody2D>(PlayerPath);
 
+        AudioFail = GetNode<AudioStreamPlayer>(AudioFailPath);
+        AudioJump = GetNode<AudioStreamPlayer>(AudioJumpPath);
+        AudioDrink = GetNode<AudioStreamPlayer>(AudioDrinkPath);
+        AudioLevel = GetNode<AudioStreamPlayer>(AudioLevelPath);
+
     }
 
     public override void _Process(float delta)
@@ -40,15 +61,47 @@ public class GUI : Control
         TimeBar.Value = LevelTime;
         TimeLeft.Text = ((int)LevelTime).ToString() + "s left";
 
-        CokeNumber.Text = Player.Get("CokeScore").ToString() + " Cokes";
+        CurrentCokeNumber.Text = ((int)Player.Get("CokeScore")).ToString() + " Cokes";
 
-        if ((int)Player.Get("CokeScore") >= CokeNumber)
+        if ((bool)Player.Get("DrinkingCoke") && !AudioDrink.Playing && (!End || !Next))
         {
-            GetTree().ChangeScene(NextLevelPath);
+            AudioDrink.Play();
         }
-        else if (LevelTime < 0f)
+
+        if ((int)Player.Get("CokeScore") >= CokeNumber && !End)
         {
-            GetTree().ChangeScene(LevelPath);
+            Next = true;
         }
+        else if (LevelTime < 0f || Input.IsActionPressed("RESET") && !Next)
+        {
+            End = true;
+        }
+
+        if (Next)
+        {
+            LevelEndTime += delta;
+            if (!AudioLevel.Playing)
+            {
+                AudioLevel.Play();
+            }
+            if (LevelEndTime > EndDelay)
+            {
+                GetTree().ChangeScene(NextLevelPath);
+            }
+        }
+        else if (End)
+        {
+            LevelEndTime += delta;
+            if (!AudioFail.Playing)
+            {
+                AudioFail.Play();
+            }
+            if (LevelEndTime > EndDelay)
+            {
+                GetTree().ChangeScene(LevelPath);
+            }
+        }
+
+
     }
 }

@@ -12,6 +12,7 @@ public class Player : KinematicBody2D
 	[Export] float Gravity = 2000.0f;
 	[Export] float JumpForce = 900.0f;
 	[Export] float DecreasedGravity = 0.8f;
+	[Export] float AirSpeed = 0.3f;
 
 	[Export] float JumpBtnTime = 0.16f;
 	float JumpBtnTimer = 2f;
@@ -72,41 +73,63 @@ public class Player : KinematicBody2D
 		JumpBtnTimer += delta;
 		GroundedTimer += delta;
 
+		// inputs
+		if (Input.IsActionPressed("LEFT"))
+		{
+			if (Velocity.x > 0)
+			{
+				Velocity.x = Mathf.Lerp(Velocity.x, 0f, Friction);
+			}
+			AnimationPlayer.FlipH = false;
+			AnimationPlayer.Play("Run");
+			if (IsOnFloor())
+			{
+				Velocity.x -= (GroundAcceleration - Weight) * delta;
+			}
+			else
+			{
+				Velocity.x -= (GroundAcceleration * AirSpeed - Weight) * delta;
+			}
+			Velocity.x = Mathf.Max(Velocity.x, -MaxWalkSpeed);
+		}
+		else if (Input.IsActionPressed("RIGHT"))
+		{
+			if (Velocity.x < 0)
+			{
+				Velocity.x = Mathf.Lerp(Velocity.x, 0f, Friction);
+			}
+			AnimationPlayer.FlipH = true;
+			AnimationPlayer.Play("Run");
+			if (IsOnFloor())
+			{
+				Velocity.x += (GroundAcceleration - Weight) * delta;
+			}
+			else
+			{
+				Velocity.x += (GroundAcceleration * AirSpeed - Weight) * delta;
+			}
+			Velocity.x = Mathf.Min(Velocity.x, MaxWalkSpeed);
+
+		}
+		else
+		{
+			AnimationPlayer.Play("Idle");
+			if (IsOnFloor())
+			{
+				Velocity.x = Mathf.Lerp(Velocity.x, 0f, Friction);
+			}
+			else
+			{
+				Velocity.x = Mathf.Lerp(Velocity.x, 0f, Friction * AirSpeed);
+			}
+		}
+
 		if (IsOnFloor())
 		{
 			Velocity.y = 0.1f;
 			GroundedTimer = 0f;
 			IsJumping = false;
 
-			// inputs
-			if (Input.IsActionPressed("LEFT"))
-			{
-				if (Velocity.x > 0)
-				{
-					Velocity.x = Mathf.Lerp(Velocity.x, 0f, Friction);
-				}
-				AnimationPlayer.FlipH = false;
-				AnimationPlayer.Play("Run");
-				Velocity.x -= (GroundAcceleration - Weight) * delta;
-				Velocity.x = Mathf.Max(Velocity.x, -MaxWalkSpeed);
-			}
-			else if (Input.IsActionPressed("RIGHT"))
-			{
-				if (Velocity.x < 0)
-				{
-					Velocity.x = Mathf.Lerp(Velocity.x, 0f, Friction);
-				}
-				AnimationPlayer.FlipH = true;
-				AnimationPlayer.Play("Run");
-				Velocity.x += (GroundAcceleration - Weight) * delta;
-				Velocity.x = Mathf.Min(Velocity.x, MaxWalkSpeed);
-
-			}
-			else
-			{
-				AnimationPlayer.Play("Idle");
-				Velocity.x = Mathf.Lerp(Velocity.x, 0f, Friction);
-			}
 		}
 		else
 		{	

@@ -1,0 +1,9 @@
+S:\GD35_games\Coke Mania\.mono\temp\bin\ExportDebug\Coke Mania.dll
+S:\GD35_games\Coke Mania\.mono\temp\bin\ExportDebug\Coke Mania.pdb
+S:\GD35_games\Coke Mania\.mono\temp\obj\ExportDebug\Coke Mania.csproj.AssemblyReference.cache
+S:\GD35_games\Coke Mania\.mono\temp\obj\ExportDebug\Coke Mania.GeneratedMSBuildEditorConfig.editorconfig
+S:\GD35_games\Coke Mania\.mono\temp\obj\ExportDebug\Coke Mania.AssemblyInfoInputs.cache
+S:\GD35_games\Coke Mania\.mono\temp\obj\ExportDebug\Coke Mania.AssemblyInfo.cs
+S:\GD35_games\Coke Mania\.mono\temp\obj\ExportDebug\Coke Mania.csproj.CoreCompileInputs.cache
+S:\GD35_games\Coke Mania\.mono\temp\obj\ExportDebug\Coke Mania.dll
+S:\GD35_games\Coke Mania\.mono\temp\obj\ExportDebug\Coke Mania.pdb
